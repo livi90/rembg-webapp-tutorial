@@ -1,80 +1,159 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>✂️ rmbg</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cropify.app - Background Removal Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body {
-        height: 100vh;
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .drop-zone {
-        border: 2px dashed #ccc;
-        padding: 20px;
-        width: 80vw;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-      }
-
-      .drop-zone.dragover {
-        background-color: #f0f0f0;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
-  </head>
-  <body>
-    <div id="dropZone" class="drop-zone">
-      <h1>rmbg</h1>
-      <form
-        id="uploadForm"
-        action="/"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        <input id="fileInput" type="file" name="file" />
-        <input type="submit" value="rm" />
-      </form>
-    </div>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <header class="bg-white/80 backdrop-blur-sm border-b border-purple-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"></path>
+                        <line x1="2" y1="21" x2="22" y2="21"></line>
+                    </svg>
+                    <div class="flex flex-col">
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
+                            Cropify.app
+                        </h1>
+                        <span class="text-xs text-gray-500">by Zeenbytec</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-2 text-sm text-purple-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+                            <path d="M5 3v4"></path>
+                            <path d="M19 17v4"></path>
+                            <path d="M3 5h4"></path>
+                            <path d="M17 19h4"></path>
+                        </svg>
+                        <span>Pro features coming soon</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="text-gray-600 hover:text-purple-600">Sign In</button>
+                        <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center space-y-8">
+            <div class="text-center max-w-2xl">
+                <h2 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
+                    Perfect Social Media Images
+                </h2>
+                <p class="mt-4 text-lg text-gray-600">
+                    Instantly resize and give some life to your images for any social media platform. Fast, free, and easy to use.
+                </p>
+            </div>
+
+            <div id="dropZone" class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 text-center cursor-pointer">
+                <h3 class="text-2xl font-semibold mb-4">Background Removal Tool</h3>
+                <p class="text-gray-600 mb-6">
+                    Upload an image with a solid color background to remove it. Best results are achieved with high-contrast backgrounds.
+                </p>
+                <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" class="space-y-4">
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-12">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p class="mt-4 text-sm text-gray-600">Drag and drop an image here, or click to select a file</p>
+                        <input id="fileInput" type="file" name="file" class="hidden" accept="image/*" />
+                    </div>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition duration-300">
+                        Remove Background
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-16 bg-white/80 backdrop-blur-sm border-t border-purple-100">
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Features</h3>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                        <li>Bulk image processing</li>
+                        <li>Multiple platform support</li>
+                        <li>Automatic optimization</li>
+                        <li>Cloud storage integration</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Resources</h3>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                        <li>Image size guide</li>
+                        <li>Platform requirements</li>
+                        <li>Best practices</li>
+                        <li>FAQ</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Legal</h3>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                        <li><a href="/terms" class="hover:text-purple-600">Terms and Conditions</a></li>
+                        <li>Privacy Policy</li>
+                        <li>Cookie Policy</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-200">
+                <p class="text-center text-sm text-gray-500">
+                    © 2023 Cropify.app by Zeenbytec - The easiest way to resize images for social media
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-      let dropZone = document.getElementById("dropZone");
-      let fileInput = document.getElementById("fileInput");
-      let uploadForm = document.getElementById("uploadForm");
+        let dropZone = document.getElementById("dropZone");
+        let fileInput = document.getElementById("fileInput");
+        let uploadForm = document.getElementById("uploadForm");
 
-      dropZone.addEventListener("click", function () {
-        fileInput.click();
-      });
+        dropZone.addEventListener("click", function(e) {
+            if (e.target === dropZone || e.target.parentNode === dropZone) {
+                fileInput.click();
+            }
+        });
 
-      fileInput.addEventListener("change", function () {
-        if (fileInput.files.length > 0) {
-          uploadForm.submit();
-        }
-      });
+        fileInput.addEventListener("change", function() {
+            if (fileInput.files.length > 0) {
+                uploadForm.submit();
+            }
+        });
 
-      dropZone.addEventListener("dragover", function (e) {
-        this.classList.add("dragover");
-      });
+        dropZone.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            this.classList.add("border-purple-600");
+        });
 
-      dropZone.addEventListener("dragleave", function (e) {
-        this.classList.remove("dragover");
-      });
+        dropZone.addEventListener("dragleave", function(e) {
+            e.preventDefault();
+            this.classList.remove("border-purple-600");
+        });
 
-      dropZone.addEventListener("drop", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.classList.remove("dragover");
+        dropZone.addEventListener("drop", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.classList.remove("border-purple-600");
 
-        let file = e.dataTransfer.files[0];
-        fileInput.files = e.dataTransfer.files;
-        uploadForm.submit();
-      });
+            let file = e.dataTransfer.files[0];
+            fileInput.files = e.dataTransfer.files;
+            uploadForm.submit();
+        });
     </script>
-  </body>
+</body>
 </html>
